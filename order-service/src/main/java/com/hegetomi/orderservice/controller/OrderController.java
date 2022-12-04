@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -31,16 +32,17 @@ public class OrderController {
         orderDto.setId(null);
         orderDto.setShipmentId(null);
         AppOrder appOrder = orderMapper.dtoToModel(orderDto);
-        log.warn(appOrder.getOrderedProductList().size() + "");
         return orderMapper.modelToDto(orderService.save(appOrder));
     }
 
     @GetMapping
+    @PreAuthorize("#username == authentication.name" + " || hasAuthority('admin')")
     public List<AppOrderDto> getForUsername(@RequestParam(name = "name") String username) {
         return orderService.findByUsername(username).stream().map(orderMapper::modelToDto).toList();
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('admin')")
     public AppOrderDto updateStatus(@PathVariable Long id, @RequestParam(name = "status") @AllowedStatus(anyOf = {Status.DECLINED, Status.CONFIRMED}) Status status) {
         Optional<AppOrder> appOrderOptional = orderService.updateStatus(id, status);
         return orderMapper.modelToDtoNoProducts(appOrderOptional
