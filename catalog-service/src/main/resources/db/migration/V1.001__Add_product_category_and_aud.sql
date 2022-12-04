@@ -1,0 +1,11 @@
+create sequence hibernate_sequence start 1 increment 1;
+create table category (id bigint not null, name varchar(255), primary key (id));
+create table category_aud (id bigint not null, rev integer not null, revtype smallint, name varchar(255), primary key (rev, id));
+create table category_product_aud (rev integer not null, category_id bigint not null, id bigint not null, revtype smallint, primary key (category_id, rev, id));
+create table product (id bigint not null, name varchar(255), price bigint, category_id bigint, primary key (id));
+create table product_aud (id bigint not null, rev integer not null, revtype smallint, name varchar(255), price bigint, category_id bigint, primary key (rev, id));
+create table revinfo (rev integer not null, revtstmp bigint, primary key (rev));
+alter table if exists category_aud add constraint category_aud_to_revinfo foreign key (rev) references revinfo;
+alter table if exists category_product_aud add constraint category_product_aud_to_revinfo foreign key (rev) references revinfo;
+alter table if exists product add constraint product_to_category foreign key (category_id) references category;
+alter table if exists product_aud add constraint product_aud_to_revinfo foreign key (rev) references revinfo;

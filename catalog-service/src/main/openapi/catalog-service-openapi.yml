@@ -1,0 +1,200 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: 'http://localhost:8080'
+    description: Generated server url
+tags:
+  - name: CategoryController
+    description: the CategoryController API
+paths:
+  /api/category:
+    post:
+      tags:
+        - CategoryController
+      operationId: postApiCategory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                string:
+                  type: string
+              x-examples:
+                example-1:
+                  string: string
+      responses:
+        '201':
+          description: Created
+  /api/product:
+    post:
+      summary: ''
+      operationId: post-api-product
+      responses:
+        '201':
+          description: Created
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                example-1:
+                  name: string
+                  price: 0
+                  category: string
+              properties:
+                name:
+                  type: string
+                price:
+                  type: integer
+                  format: int64
+                category:
+                  type: string
+      tags:
+        - product-controller
+    get:
+      summary: ''
+      operationId: get-api-product
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                x-examples:
+                  example-1:
+                    - id: 0
+                      name: string
+                      price: 0
+                      category: string
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                    name:
+                      type: string
+                    price:
+                      type: integer
+                      format: int64
+                    category:
+                      type: string
+      parameters:
+        - schema:
+            type: integer
+            format: int64
+          in: query
+          name: page
+        - schema:
+            type: integer
+            format: int64
+          in: query
+          name: size
+        - schema:
+            type: string
+          in: query
+          name: sort
+        - schema:
+            type: string
+          in: query
+          name: product.name
+        - schema:
+            type: string
+          in: query
+          name: product.category.name
+        - schema:
+            type: integer
+            format: int64
+          in: query
+          name: priceFrom
+        - schema:
+            type: integer
+            format: int64
+          in: query
+          name: priceTo
+      tags:
+        - product-controller
+    parameters: []
+  '/api/product/{id}':
+    parameters:
+      - schema:
+          type: integer
+          format: int64
+        name: id
+        in: path
+        required: true
+    put:
+      summary: ''
+      operationId: put-api-product-id
+      responses:
+        '200':
+          description: OK
+      description: ''
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                example-1:
+                  name: string
+                  price: 0
+                  category: string
+              properties:
+                name:
+                  type: string
+                price:
+                  type: integer
+                  format: int64
+                category:
+                  type: string
+      tags:
+        - product-controller
+    delete:
+      summary: ''
+      operationId: delete-api-product-id
+      responses:
+        '204':
+          description: No Content
+      tags:
+        - product-controller
+  '/api/product/history/{id}':
+    parameters:
+      - schema:
+          type: integer
+          format: int64
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags:
+        - product-controller
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                x-examples:
+                  example-1:
+                    - price: 0
+                      'date:': string
+                items:
+                  type: object
+                  properties:
+                    price:
+                      type: integer
+                      format: int64
+                    'date:':
+                      type: string
+                      format: date-time
+      operationId: get-api-product-history-id
+components:
+  schemas: {}
