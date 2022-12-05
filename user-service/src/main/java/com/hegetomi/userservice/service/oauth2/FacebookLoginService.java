@@ -33,6 +33,7 @@ public class FacebookLoginService {
                     .fbId(user.getId())
                     .username(user.getName())
                     .password("asd")
+                    .email(user.getEmail())
                     .roles(Set.of("customer"))
                     .build());
         }

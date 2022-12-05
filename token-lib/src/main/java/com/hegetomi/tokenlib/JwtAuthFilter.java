@@ -5,6 +5,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -28,19 +29,20 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader(AUTHORIZATION);
-        Authentication authentication = userDetails(authHeader, jwtService);
+        UsernamePasswordAuthenticationToken authentication = userDetails(authHeader, jwtService);
         if (null != authentication) {
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
     }
 
-    public static Authentication userDetails(String authHeader, JwtService jwtService) {
+    public static UsernamePasswordAuthenticationToken userDetails(String authHeader, JwtService jwtService) {
         if (authHeader != null && authHeader.startsWith(BEARER_)) {
             String jwtToken = authHeader.substring(BEARER_.length());
             UserDetails principal = jwtService.parseJwt(jwtToken);
 
-            Authentication authentication =
+            UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
             return authentication;
         }

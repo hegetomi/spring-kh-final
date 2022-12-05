@@ -78,6 +78,12 @@ public class ProductController implements ProductControllerApi {
         return ResponseEntity.ok(productService.findAll(predicate, pageable).stream().map(productMapper::productToDto).toList());
     }
 
+
+    @Override
+    public ResponseEntity<List<GetApiProductHistoryId200ResponseInner>> getApiProductHistoryId(Long id) {
+        return ResponseEntity.ok(productService.getProductPriceHistory(id));
+    }
+
     private Pageable getPageable() {
         Method method = null;
         try {
@@ -92,21 +98,6 @@ public class ProductController implements ProductControllerApi {
     public void configPageable(Pageable pageable) {
     }
 
-    public void configurePredicate(@QuerydslPredicate(root = Product.class) Predicate predicate) {
-    }
-
-    private Predicate createPredicate(String configurePredicate) {
-        Method method = null;
-        try {
-            method = this.getClass().getMethod(configurePredicate, Predicate.class);
-
-            MethodParameter methodParameter = new MethodParameter(method, 0);
-            return (Predicate) querydslPredicateArgumentResolver.resolveArgument(methodParameter, null, nativeWebRequest, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
-    }
 
     private Predicate predicateCreator(String productName,
                                        String productCategory, Long priceFrom, Long priceTo) {
@@ -128,8 +119,4 @@ public class ProductController implements ProductControllerApi {
         return bb;
     }
 
-    @Override
-    public ResponseEntity<List<GetApiProductHistoryId200ResponseInner>> getApiProductHistoryId(Long id) {
-        return ResponseEntity.ok(productService.getProductPriceHistory(id));
-    }
 }

@@ -26,3 +26,8 @@ spring:
             - Path=/order/**
           filters:
             - RewritePath=/order(?<segment>/?.*), /api$\{segment}
+com:
+  hegetomi:
+    tokenlib:
+      keypaths:
+        public: /Users/Tamás/Downloads/public.pem

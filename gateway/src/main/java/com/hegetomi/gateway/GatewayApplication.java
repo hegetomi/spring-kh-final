@@ -1,10 +1,11 @@
 package com.hegetomi.gateway;
 
+import com.hegetomi.tokenlib.JwtAuthFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackageClasses = {JwtAuthFilter.class, GatewayApplication.class})
 @EnableDiscoveryClient
 public class GatewayApplication {
 

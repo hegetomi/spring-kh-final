@@ -8,6 +8,7 @@ import com.hegetomi.userservice.service.AppUserDetailsService;
 import com.hegetomi.userservice.service.AuthService;
 import com.hegetomi.userservice.service.oauth2.FacebookLoginService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.juli.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class JwtController {
 
 
@@ -38,10 +40,10 @@ public class JwtController {
 
     @PostMapping("/auth/login")
     public String login(@RequestBody LoginDto loginDto) {
-
         UserDetails userDetails = null;
         String fbToken = loginDto.getFbToken();
         if (fbToken != null) {
+            log.warn("fbtoken");
             userDetails = facebookLoginService.getUserDetailsForToken(fbToken);
         } else {
             Authentication auth = authenticationManager.authenticate(
